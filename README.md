@@ -3,6 +3,9 @@
 MinFlux is a minimal, convention based framework for creating [React][react] and
 [React-Native][react-native] applications with the [Flux][flux] architecture.
 
+This framework is written with ES2015 syntax via [Babel][babel]. It uses [Gulp][gulp]
+for testing and building.
+
 ### Vocabulary
 
 `Components` are [React][react] components. Their sole responsiblity is to
@@ -62,19 +65,16 @@ We believe in a unidirectional flow of data.
 $ npm install [--save] min-flux
 ```
 
-# API
-
-### MiniFlux.Store
-
-##### Example
+# Example
 
 ```js
+// ThreadStore.js
 'use strict';
 
 var MinFlux = require('min-flux');
 var ActionCreator = require('./action-creator');
 
-var ThreadStore = new MinFlux.Store({
+module.exports = new MinFlux.Store({
   // Component accessible query method
   getAllThreads() {
     var result = Object.keys(this._data).map((key) => {
@@ -122,7 +122,99 @@ var ThreadStore = new MinFlux.Store({
     },
   },
 });
+
+// ThreadActionCreator
+'use strict';
+
+var MinFlux = require('min-flux');
+
+module.exports = new MinFlux.ActionCreator({
+  /**
+   * These are ActionTypes. All Stores that want to handle them, must have
+   * corresponding properties in their actionTypeHandlers hash.
+   */
+  actionTypes: {
+    FETCH_THREADS: null,
+    SELECT_THREAD: null,
+  },
+
+  selectThread(threadID) {
+    this.dispatch(this.actionTypes.SELECT_THREAD, {
+      threadID: threadID,
+    });
+  },
+
+  fetchThreads() {
+    this.dispatch(this.actionTypes.FETCH_THREADS);
+  },
+});
+
+// Component.js
+'use strict';
+
+var ThreadActionCreator = require('./ThreadActionCreator');
+var ThreadStore = require('./ThreadStore');
+
+var React = require('react-native');
+var {
+  View,
+  Component,
+  TouchableHighlight,
+} = React;
+
+module.exports = React.createClass({
+  componentDidMount() {
+    // Subscribe to ThreadStore change event
+    ThreadStore.addChangeListener(this._onChange.bind(this));
+  },
+
+  componentWillUnmount() {
+    // Unsubscribe to ThreadStore change event
+    ThreadStore.removeChangeListener(this._onChange.bind(this));
+  },
+
+  _onChange() {
+    var threads = ThreadStore.getAllThreads();
+    var selectedThread = ThreadStore.getSelectedThread();
+
+    // Update our state so that UI is rerendered
+    this.setState({
+      threads: threads,
+      selectedThread: selectedThread,
+    });
+  },
+
+  _onPress(threadID) {
+    ThreadActionCreator.selectThread(threadID);
+  },
+
+  render() {
+    var threads = this.state.threads;
+    var selectedThread = this.state.selectedThread;
+
+    var threadsUI = threads.forEach((thread) => {
+      return (
+        <TouchableHighlight onPress={() => this._onPress(thread.id) }>
+          <Text>{thread.name}</Text>
+        </TouchableHighlight>
+      );
+    });
+
+    return (
+      <View>
+        <Text>Selected Thread: {selectedThread.name}<Text>
+      </View>
+      <View>
+        {threadsUI}
+      </View>
+    );
+  },
+});
 ```
+
+# API
+
+### MiniFlux.Store
 
 ##### MiniFlux.Store(spec)
 
@@ -287,3 +379,5 @@ $ gulp build
 [react-native]:https://facebook.github.io/react-native/
 [flux]:https://facebook.github.io/flux/
 [dispatcher]:https://facebook.github.io/flux/docs/dispatcher.html#content
+[babel]:https://babeljs.io/
+[gulp]:http://gulpjs.com/
