@@ -20,7 +20,13 @@
   },
   "devDependencies": {
     "babel": "^5.4.7",
+    "browserify": "^10.2.3",
     "chai": "^2.3.0",
-    "mocha": "^2.2.5"
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0",
+    "mocha": "^2.2.5",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   }
 }
