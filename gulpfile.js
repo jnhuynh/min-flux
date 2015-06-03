@@ -28,18 +28,14 @@ gulp.task('build', function() {
 });
 
 gulp.task('test', function() {
-  var MinFlux = require('./index');
-  var expect = require('chai').expect;
-
-
   return gulp.src(['test/**/*.js'], { read: false })
     .pipe(mocha({
       reporter: 'dot',
-      require: [
-        './index',
-        'chai',
-      ],
     }));
+});
+
+gulp.task('live-test', function() {
+  return gulp.watch(['index.js', 'lib/**/*.js', 'test/**/*.js'], ['test']);
 });
 
 gulp.task('default', ['test']);
