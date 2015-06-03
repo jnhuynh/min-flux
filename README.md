@@ -100,8 +100,78 @@ $ gulp live-test
 $ gulp build
 ```
 
+# API
+
+### MiniFlux.Store
+```js
+/**
+ * Constructor function for new MinFlux.Store.
+ *
+ * Registers a callback to the dispatcher that will map an incoming action
+ * type to an action type handler if it is found in the spec. It will set the
+ * dispatchToken property.
+ *
+ * @method create
+ * @param spec {Object} custom properties for new ActionCreator instance
+ * @return {MinFlux.ActionCreator}
+ */
+MiniFlux.Store(spec)
+```
+
+```js
+/**
+ * Hash used to house the Store's data. Only interact with this in your Store
+ * instance
+ *
+ * @private
+ * @property _data
+ */
+MiniFlux.Store._data
+```
+
+```js
+/**
+ * Emits the change event which will trigger all the registered callbacks.
+ *
+ * @method emitChange
+ * @return {MinFlux.Store}
+ */
+MinFlux.Store.emitChange
+```
+
+```js
+/**
+ * Registers a callback to the Store's change event.
+ *
+ * @method addChangeListener
+ * @param callback {Function} the callback that will be registered
+ * @return {MinFlux.Store}
+ */
+MinFlux.Store.addChangeListener
+```
+
+```js
+/**
+ * Removes a registered callback from the Store's change event.
+ *
+ * @method removeChangeListener
+ * @param callback {Function} the callback that was registered prior
+ * @return {MinFlux.Store}
+ */
+MinFlux.Store.removeChangeListener
+```
+
+### MiniFlux.ActionCreator
+
+### MiniFlux.Dispatcher
+
+This just a singleton of Facebook's Flux dispatcher. Refer to [HERE][dispatcher]
+for the documentation. You **shouldn't** have to interact with this singleton
+directly.
+
 [mocha]:http://mochajs.org/
 [chai]:http://chaijs.com/
 [react]:http://facebook.github.io/react/
 [react-native]:https://facebook.github.io/react-native/
 [flux]:https://facebook.github.io/flux/
+[dispatcher]:https://facebook.github.io/flux/docs/dispatcher.html#content
