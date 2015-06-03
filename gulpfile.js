@@ -7,6 +7,9 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 
+var mocha = require('gulp-mocha');
+var mochaBabelRegister = require('babel/register');
+
 var buildDestination = 'build'
 
 gulp.task('build', function() {
@@ -23,3 +26,20 @@ gulp.task('build', function() {
       .pipe(gulp.dest(buildDestination));
   });
 });
+
+gulp.task('test', function() {
+  var MinFlux = require('./index');
+  var expect = require('chai').expect;
+
+
+  return gulp.src(['test/**/*.js'], { read: false })
+    .pipe(mocha({
+      reporter: 'dot',
+      require: [
+        './index',
+        'chai',
+      ],
+    }));
+});
+
+gulp.task('default', ['test']);
