@@ -91,5 +91,57 @@ describe('ActionCreator', () => {
       });
     });
   });
+
+  describe('dispatch', () => {
+    var actionCreator;
+
+    beforeEach(() => {
+      actionCreator = MinFlux.ActionCreator.create({
+        actionTypes: {
+          HI: null,
+        }
+      });
+    });
+
+    it('dispatches with an action object that has type and payload propertes', (done) => {
+      MinFlux.Dispatcher.register((action) => {
+        expect(action.type).to.equal('HI');
+        expect(action.payload).to.equal('yo');
+        done();
+      });
+
+      actionCreator.dispatch('HI', 'yo');
+    });
+
+    context('when actionType argument is not a string', () => {
+      it('throws an error', () => {
+        var dispatchFail = () => {
+          actionCreator.dispatch();
+        };
+
+        expect(dispatchFail).to.throw(Error);
+      });
+    });
+
+    context('when actionType argument is not in hash of actionTypes', () => {
+      it('throws an error', () => {
+        var dispatchFail = () => {
+          actionCreator.dispatch('bye');
+        };
+
+        expect(dispatchFail).to.throw(Error);
+      });
+    });
+
+    context('when actionType argument is not the same case as known actionType', () => {
+      it('throws an error', () => {
+        var dispatchFail = () => {
+          actionCreator.dispatch('hi');
+        };
+
+        expect(dispatchFail).to.throw(Error);
+      });
+    });
+  });
 });
 

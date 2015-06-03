@@ -78,20 +78,14 @@ describe('Store', () => {
       store = MinFlux.Store.create({});
     });
 
-    it('throws an except if the callback argument is not a function', () => {
-      var addFail = () => {
-        store.addChangeListener('hi');
-      };
+    context('when the callback argument is not a function', () => {
+      it('throws an error', () => {
+        var addFail = () => {
+          store.addChangeListener('hi');
+        };
 
-      expect(addFail).to.throw(Error);
-    });
-
-    it('invokes callback when emitChange is invoked', (done) => {
-      store.addChangeListener(() => {
-        done();
+        expect(addFail).to.throw(Error);
       });
-
-      store.emitChange();
     });
 
     it('returns the store for chaining', () => {
@@ -108,12 +102,14 @@ describe('Store', () => {
       store = MinFlux.Store.create({});
     });
 
-    it('throws an except if the callback argument is not a function', () => {
-      var removeFail = () => {
-        store.removeChangeListener('hi');
-      };
+    context('when the callback argument is not a function', () => {
+      it('throws an error', () => {
+        var removeFail = () => {
+          store.removeChangeListener('hi');
+        };
 
-      expect(removeFail).to.throw(Error);
+        expect(removeFail).to.throw(Error);
+      });
     });
 
     it('returns the store for chaining', () => {
