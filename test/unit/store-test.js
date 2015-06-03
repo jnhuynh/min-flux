@@ -70,5 +70,57 @@ describe('Store', () => {
       });
     });
   });
+
+  describe('addChangeListener', () => {
+    var store;
+
+    beforeEach(() => {
+      store = MinFlux.Store.create({});
+    });
+
+    it('throws an except if the callback argument is not a function', () => {
+      var addFail = () => {
+        store.addChangeListener('hi');
+      };
+
+      expect(addFail).to.throw(Error);
+    });
+
+    it('invokes callback when emitChange is invoked', (done) => {
+      store.addChangeListener(() => {
+        done();
+      });
+
+      store.emitChange();
+    });
+
+    it('returns the store for chaining', () => {
+      var result = store.addChangeListener(() => {});
+
+      expect(result).to.equal(store);
+    });
+  });
+
+  describe('removeChangeListener', () => {
+    var store;
+
+    beforeEach(() => {
+      store = MinFlux.Store.create({});
+    });
+
+    it('throws an except if the callback argument is not a function', () => {
+      var removeFail = () => {
+        store.removeChangeListener('hi');
+      };
+
+      expect(removeFail).to.throw(Error);
+    });
+
+    it('returns the store for chaining', () => {
+      var result = store.removeChangeListener(() => {});
+
+      expect(result).to.equal(store);
+    });
+  });
 });
 
