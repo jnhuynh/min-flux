@@ -168,8 +168,9 @@ MinFlux.Store.removeChangeListener(callback)
 /**
  * Constructor function for new MinFlux.ActionCreator.
  *
- * It must contain an actionTypes property. It must be a hash. They keys are
- * the constants used for action type. The values must be null.
+ * It accepts a spec argument. It must contain an actionTypes property. It must
+ * be a hash. They keys are the constants used for action type. The values must
+ * be null.
  *
  * {
  *   ACTION_TYPE_1: null,
