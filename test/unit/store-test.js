@@ -4,9 +4,9 @@ var MinFlux = require('../../index');
 var expect = require('chai').expect;
 
 describe('Store', () => {
-  describe('create', () => {
+  describe('constructor', () => {
     it('returns an object with properties in spec', () => {
-      var store =  MinFlux.Store.create({
+      var store = new MinFlux.Store({
         actionTypeHanders: {
           YO: function() {},
         },
@@ -25,7 +25,7 @@ describe('Store', () => {
     });
 
     it('returns an object a dispatchToken property set', () => {
-      var store =  MinFlux.Store.create({
+      var store = new MinFlux.Store({
         actionTypeHanders: {
           YO: function() {},
         },
@@ -37,7 +37,7 @@ describe('Store', () => {
     context('when spec argument has a addChangeListener property', () => {
       it('throws an error', () => {
         var createFail = () => {
-          MinFlux.Store.create({
+          new MinFlux.Store({
             addChangeListener: 'hi',
           });
         };
@@ -49,7 +49,7 @@ describe('Store', () => {
     context('when spec argument has a removeChangeListener property', () => {
       it('throws an error', () => {
         var createFail = () => {
-          MinFlux.Store.create({
+          new MinFlux.Store({
             removeChangeListener: 'hi',
           });
         };
@@ -61,7 +61,7 @@ describe('Store', () => {
     context('when spec argument has a emitChange property', () => {
       it('throws an error', () => {
         var createFail = () => {
-          MinFlux.Store.create({
+          new MinFlux.Store({
             emitChange: 'hi',
           });
         };
@@ -75,7 +75,7 @@ describe('Store', () => {
     var store;
 
     beforeEach(() => {
-      store = MinFlux.Store.create({});
+      store = new MinFlux.Store({});
     });
 
     context('when the callback argument is not a function', () => {
@@ -99,7 +99,7 @@ describe('Store', () => {
     var store;
 
     beforeEach(() => {
-      store = MinFlux.Store.create({});
+      store = new MinFlux.Store({});
     });
 
     context('when the callback argument is not a function', () => {
