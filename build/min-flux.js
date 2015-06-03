@@ -27,71 +27,82 @@
     var Dispatcher = require("./dispatcher");
     var KeyMirror = require("keymirror");
 
-    var _actionCreatorSpec = {
-      /**
-       * A hash of string constants that are used to broadcasts actions to Stores.
-       *
-       * @property actionTypes
-       * @type {Object}
-       * @default {}
-       */
-      actionTypes: {},
+    var RESERVED_KEYS = ["dispatch"];
 
-      /**
-       * Broadcasts an action type and payload for consumption by Stores.
-       *
-       * @method dispatch
-       * @param actionType {Object} an action type from the action types hash
-       * @param payload {Object} data to send along with action
-       * @return {MinFlux.ActionCreator}
-       */
-      dispatch: function dispatch(actionType, payload) {
-        if (typeof actionType !== "string") {
-          throw new Error("Expected actionType argument to be a string");
+    /**
+     * Constructor function for new MinFlux.ActionCreator.
+     *
+     * It must contain an actionTypes property. It must be a hash. They keys are
+     * the constants used for action type. The values must be null.
+     *
+     * {
+     *   ACTION_TYPE_1: null,
+     *   ACTION_TYPE_2: null,
+     *   ...,
+     *   ACTION_TYPE_N: null,
+     * }
+     *
+     * @method create
+     * @param spec {Object} custom properties for new ActionCreator instance
+     * @return {MinFlux.ActionCreator}
+     */
+    function ActionCreator(spec) {
+      var _this = this;
+
+      spec = !!spec ? spec : {};
+
+      RESERVED_KEYS.forEach(function (key) {
+        if (!!spec[key]) {
+          throw new Error("Overwriting of MinFlux.Store." + key + " not allowed");
         }
+      });
 
-        if (Object.keys(this.actionTypes).indexOf(actionType) === -1) {
-          throw new Error("Unknown actionType argument, not found in actionTypes hash property");
-        }
+      var actionTypes = spec.actionTypes;
 
-        Dispatcher.dispatch({
-          type: actionType,
-          payload: payload });
-
-        return this;
-      } };
-
-    var ActionCreator = {
-      /**
-       * Factory function to instantiate new MinFlux.ActionCreator.
-       *
-       * It must contain an actionTypes property. It must be a hash. They keys are
-       * the constants used for action type. The values can be null.
-       *
-       * {
-       *   ACTION_TYPE_1: null,
-       *   ACTION_TYPE_2: null,
-       *   ...,
-       *   ACTION_TYPE_N: null,
-       * }
-       *
-       * @method create
-       * @param spec {Object} custom properties for new ActionCreator instance
-       * @return {MinFlux.ActionCreator}
-       */
-      create: function create(spec) {
-        var actionTypes = spec.actionTypes;
-
-        if (!actionTypes || !(actionTypes instanceof Object)) {
-          throw new Error("Expected actionTypes property to be a hash");
-        }
-
-        spec.actionTypes = KeyMirror(actionTypes);
-
-        var newActionCreator = Object.assign({}, _actionCreatorSpec, spec);
-
-        return newActionCreator;
+      if (!actionTypes || !(actionTypes instanceof Object)) {
+        throw new Error("Expected actionTypes property to be a hash");
       }
+
+      spec.actionTypes = KeyMirror(actionTypes);
+
+      Object.keys(spec).forEach(function (key) {
+        _this[key] = spec[key];
+      });
+
+      return this;
+    };
+
+    /**
+     * A hash of string constants that are used to broadcasts actions to Stores.
+     *
+     * @property actionTypes
+     * @type {Object}
+     * @default {}
+     */
+    ActionCreator.prototype.actionTypes = {};
+
+    /**
+     * Broadcasts an action type and payload for consumption by Stores.
+     *
+     * @method dispatch
+     * @param actionType {Object} an action type from the action types hash
+     * @param payload {Object} data to send along with action
+     * @return {MinFlux.ActionCreator}
+     */
+    ActionCreator.prototype.dispatch = function dispatch(actionType, payload) {
+      if (typeof actionType !== "string") {
+        throw new Error("Expected actionType argument to be a string");
+      }
+
+      if (Object.keys(this.actionTypes).indexOf(actionType) === -1) {
+        throw new Error("Unknown actionType argument, not found in actionTypes hash property");
+      }
+
+      Dispatcher.dispatch({
+        type: actionType,
+        payload: payload });
+
+      return this;
     };
 
     module.exports = ActionCreator;
@@ -111,91 +122,105 @@
     var EventEmitter = require("events").EventEmitter;
 
     var CHANGE_EVENT = "MIN_FLUX_STORE_CHANGE";
+    var RESERVED_KEYS = ["addChangeListener", "removeChangeListener", "emitChange"];
 
-    var _storeSpec = {
-      /**
-       * Hash used to house the Store's data.
-       *
-       * @private
-       * @property _data
-       */
-      _data: {},
+    /**
+     * Constructor function for new MinFlux.Store.
+     *
+     * Registers a callback to the dispatcher that will map an incoming action
+     * type to an action type handler if it is found in the spec. It will set the
+     * dispatchToken property.
+     *
+     * @method create
+     * @param spec {Object} custom properties for new ActionCreator instance
+     * @return {MinFlux.ActionCreator}
+     */
+    function Store(spec) {
+      var _this2 = this;
 
-      /**
-       * Emits the change event which will trigger all the registered callbacks.
-       *
-       * @method emitChange
-       * @return {MinFlux.Store}
-       */
-      emitChange: function emitChange() {
-        this.emit(CHANGE_EVENT);
+      if (!(this instanceof Store)) {
+        throw new Error("Constructor called as a function, use new keyword");
+      }
 
-        return this;
-      },
+      spec = !!spec ? spec : {};
+      spec.actionTypeHandlers = !!spec.actionTypeHandlers ? spec.actionTypeHandlers : {};
 
-      /**
-       * Registers a callback to the Store's change event.
-       *
-       * @method addChangeListener
-       * @param callback {Function} the callback that will be registered
-       * @return {MinFlux.Store}
-       */
-      addChangeListener: function addChangeListener(callback) {
-        if (typeof callback !== "function") {
-          throw new Error("Expected callback to be a function");
+      RESERVED_KEYS.forEach(function (key) {
+        if (!!spec[key]) {
+          throw new Error("Overwriting of MinFlux.Store." + key + " not allowed");
         }
+      });
 
-        this.on(CHANGE_EVENT, callback);
+      Object.keys(spec).forEach(function (key) {
+        _this2[key] = spec[key];
+      });
 
-        return this;
-      },
+      this.dispatchToken = Dispatcher.register(function (action) {
+        var callback = _this2.actionTypeHandlers[action.type];
 
-      /**
-       * Removes a registered callback from the Store's change event.
-       *
-       * @method removeChangeListener
-       * @param callback {Function} the callback that was registered prior
-       * @return {MinFlux.Store}
-       */
-      removeChangeListener: function removeChangeListener(callback) {
-        if (typeof callback !== "function") {
-          throw new Error("Expected callback to be a function");
+        if (!!callback) {
+          callback.apply(_this2, [action]);
         }
+      });
 
-        this.removeListener(CHANGE_EVENT, callback);
+      return this;
+    };
 
-        return this;
-      },
+    Store.prototype = EventEmitter.prototype;
 
-      dispatchToken: null };
+    /**
+     * Hash used to house the Store's data.
+     *
+     * @private
+     * @property _data
+     */
+    Store.prototype._data = {};
 
-    var Store = {
-      /**
-       * Factory function to instantiate new MinFlux.Store.
-       *
-       * Registers a callback to the dispatcher that will map an incoming action
-       * type to an action type handler if it is found in the spec. It will set the
-       * dispatchToken property.
-       *
-       * @method create
-       * @param spec {Object} custom properties for new ActionCreator instance
-       * @return {MinFlux.ActionCreator}
-       */
-      create: function create(spec) {
-        var newStore = Object.assign({}, EventEmitter.prototype, _storeSpec, spec);
+    /**
+     * Emits the change event which will trigger all the registered callbacks.
+     *
+     * @method emitChange
+     * @return {MinFlux.Store}
+     */
+    Store.prototype.emitChange = function emitChange() {
+      this.emit(CHANGE_EVENT);
 
-        var dispatchToken = Dispatcher.register(function (action) {
-          var callback = newStore.actionTypeHandlers[action.type];
+      return this;
+    };
 
-          if (!!callback) {
-            callback.apply(newStore, [action]);
-          }
-        });
+    /**
+     * Registers a callback to the Store's change event.
+     *
+     * @method addChangeListener
+     * @param callback {Function} the callback that will be registered
+     * @return {MinFlux.Store}
+     */
+    Store.prototype.addChangeListener = function addChangeListener(callback) {
+      if (typeof callback !== "function") {
+        throw new Error("Expected callback to be a function");
+      }
 
-        newStore.dispatchToken = dispatchToken;
+      this.on(CHANGE_EVENT, callback);
 
-        return newStore;
-      } };
+      return this;
+    };
+
+    /**
+     * Removes a registered callback from the Store's change event.
+     *
+     * @method removeChangeListener
+     * @param callback {Function} the callback that was registered prior
+     * @return {MinFlux.Store}
+     */
+    Store.prototype.removeChangeListener = function removeChangeListener(callback) {
+      if (typeof callback !== "function") {
+        throw new Error("Expected callback to be a function");
+      }
+
+      this.removeListener(CHANGE_EVENT, callback);
+
+      return this;
+    };
 
     module.exports = Store;
   }, { "./dispatcher": 3, "events": 5 }], 5: [function (require, module, exports) {

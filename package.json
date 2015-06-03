@@ -12,7 +12,7 @@
     "react-native"
   ],
   "author": "John Huynh <john@huynh.io>",
-  "license": "",
+  "license": "MIT",
   "dependencies": {
     "events": "^1.0.2",
     "flux": "^2.0.3",
