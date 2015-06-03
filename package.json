@@ -4,7 +4,7 @@
   "description": "A minimal Flux based framework",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [
     "flux",
@@ -17,5 +17,9 @@
     "events": "^1.0.2",
     "flux": "^2.0.3",
     "keymirror": "^0.1.1"
+  },
+  "devDependencies": {
+    "chai": "^2.3.0",
+    "mocha": "^2.2.5"
   }
 }
