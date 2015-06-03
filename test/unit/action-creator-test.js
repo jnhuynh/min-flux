@@ -6,7 +6,7 @@ var expect = require('chai').expect;
 describe('ActionCreator', () => {
   describe('create', () => {
     it('returns an object with properties in spec', () => {
-      var actionCreator =  MinFlux.ActionCreator.create({
+      var actionCreator =  new MinFlux.ActionCreator({
         actionTypes: {
           HI: null,
           HOW_DO_YOU_DO: null,
@@ -25,7 +25,7 @@ describe('ActionCreator', () => {
     context('when spec argument has a dispatch property', () => {
       it('throws an error', () => {
         var createFail = () => {
-          MinFlux.ActionCreator.create({
+          new MinFlux.ActionCreator({
             actionTypes: {},
             dispatch: 'hi',
           });
@@ -37,7 +37,7 @@ describe('ActionCreator', () => {
 
     context('when actionTypes is a hash of values are null', () => {
       it('returns an object with actionTypes whose values are strings of the keys', () => {
-        var actionCreator = MinFlux.ActionCreator.create({
+        var actionCreator = new MinFlux.ActionCreator({
           actionTypes: {
             HI: null,
             HOW_DO_YOU_DO: null,
@@ -55,7 +55,7 @@ describe('ActionCreator', () => {
 
     context('when actionTypes is a hash of non null values', () => {
       it('returns an object with actionTypes whose values are strings of the keys', () => {
-        var actionCreator = MinFlux.ActionCreator.create({
+        var actionCreator = new MinFlux.ActionCreator({
           actionTypes: {
             HI: 'yo',
             HOW_DO_YOU_DO: 'good',
@@ -74,7 +74,7 @@ describe('ActionCreator', () => {
     context('when actionTypes property is missing from spec argument', () => {
       it('throws an error', () => {
         var createFail = () => {
-          MinFlux.ActionCreator.create({});
+          new MinFlux.ActionCreator({});
         };
 
         expect(createFail).to.throw(Error);
@@ -84,7 +84,7 @@ describe('ActionCreator', () => {
     context('when spec argument is missing', () => {
       it('throws an error', () => {
         var createFail = () => {
-          MinFlux.ActionCreator.create();
+          new MinFlux.ActionCreator();
         };
 
         expect(createFail).to.throw(Error);
@@ -96,7 +96,7 @@ describe('ActionCreator', () => {
     var actionCreator;
 
     beforeEach(() => {
-      actionCreator = MinFlux.ActionCreator.create({
+      actionCreator = new MinFlux.ActionCreator({
         actionTypes: {
           HI: null,
         }
