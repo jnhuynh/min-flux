@@ -103,6 +103,7 @@ $ gulp build
 # API
 
 ### MiniFlux.Store
+
 ```js
 /**
  * Constructor function for new MinFlux.Store.
@@ -136,7 +137,7 @@ MiniFlux.Store._data
  * @method emitChange
  * @return {MinFlux.Store}
  */
-MinFlux.Store.emitChange
+MinFlux.Store.emitChange()
 ```
 
 ```js
@@ -147,7 +148,7 @@ MinFlux.Store.emitChange
  * @param callback {Function} the callback that will be registered
  * @return {MinFlux.Store}
  */
-MinFlux.Store.addChangeListener
+MinFlux.Store.addChangeListener(callback)
 ```
 
 ```js
@@ -158,10 +159,54 @@ MinFlux.Store.addChangeListener
  * @param callback {Function} the callback that was registered prior
  * @return {MinFlux.Store}
  */
-MinFlux.Store.removeChangeListener
+MinFlux.Store.removeChangeListener(callback)
 ```
 
 ### MiniFlux.ActionCreator
+
+```js
+/**
+ * Constructor function for new MinFlux.ActionCreator.
+ *
+ * It must contain an actionTypes property. It must be a hash. They keys are
+ * the constants used for action type. The values must be null.
+ *
+ * {
+ *   ACTION_TYPE_1: null,
+ *   ACTION_TYPE_2: null,
+ *   ...,
+ *   ACTION_TYPE_N: null,
+ * }
+ *
+ * @method create
+ * @param spec {Object} custom properties for new ActionCreator instance
+ * @return {MinFlux.ActionCreator}
+ */
+MinFlux.ActionCreator(spec)
+```
+
+```js
+/**
+ * A hash of string constants that are used to broadcasts actions to Stores.
+ *
+ * @property actionTypes
+ * @type {Object}
+ * @default {}
+ */
+ActionCreator.actionTypes
+```
+
+```js
+/**
+ * Broadcasts an action type and payload for consumption by Stores.
+ *
+ * @method dispatch
+ * @param actionType {Object} an action type from the action types hash
+ * @param payload {Object} data to send along with action
+ * @return {MinFlux.ActionCreator}
+ */
+MiniFlux.ActionCreator.dispatch(actionType, payload)
+```
 
 ### MiniFlux.Dispatcher
 
