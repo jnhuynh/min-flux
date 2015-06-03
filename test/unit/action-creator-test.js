@@ -12,9 +12,14 @@ describe('ActionCreator', () => {
           HOW_DO_YOU_DO: null,
           A1A: null,
         },
+        aString: 'hi',
+        aFunc: function() {},
       });
 
       expect(actionCreator.dispatch).to.be.a('function');
+
+      expect(actionCreator.aFunc).to.be.a('function');
+      expect(actionCreator.aString).to.be.a('string');
     });
 
     context('when spec argument has a dispatch property', () => {
