@@ -62,47 +62,67 @@ We believe in a unidirectional flow of data.
 $ npm install [--save] min-flux
 ```
 
-# Contributing to MinFlux
-
-Fork `git@github.com:jnhuynh/min-flux.git`, clone your new fork.
-
-```
-$ cd min-flux
-$ npm install
-$ npm install -g gulp
-$ npm install -g mocha
-```
-
-We use [Mocha][1] as our testing framework and [Chai][2] as our test assertion
-library.
-
-### Testing MinFlux
-
-For one test run:
-
-```
-$ gulp test
-
-or
-
-$ gulp
-```
-
-For live reloading:
-
-```
-$ gulp live-test
-```
-
-### Building MinFlux
-
-```
-$ gulp build
-```
-
 # API
 
 ### MiniFlux.Store
+
+##### Example
+
+```js
+'use strict';
+
+var MinFlux = require('min-flux');
+var ActionCreator = require('./action-creator');
+
+var ThreadStore = new MinFlux.Store({
+  // Component accessible query method
+  getAllThreads() {
+    var result = Object.keys(this._data).map((key) => {
+      return ImmutableCopy(this._data[key]);
+    });
+
+    return result;
+  },
+
+  // Component accessible query method
+  getSelectedThread() {
+    return ImmutableCopy(this.selectedThread);
+  },
+
+  _fetchThreads() {
+    var aPromise = // AJAX, AsyncStorage, WebSockets, whatever to fetch new data
+    aPromise.then((payload) => {
+      // Update our internal data house with new data
+      this._data = payload;
+
+      // Emit a change event for all of our subscribed Components
+      this.emitChange();
+    })
+  },
+
+  _selectedThread: null,
+  _selectThread(threadID) {
+    this._selectedThread = this._data[threadID];
+
+    // Emit a change event for all of our subscribed Components
+    this.emitChange();
+  },
+
+  /**
+   * The keys within actionTypeHandlers MUST match the ActionType that it is
+   * trying to handle.
+   */
+  actionTypeHandlers: {
+    FETCH_THREADS(action) {
+      this._fetchThreads();
+    },
+
+    SELECT_THREAD(action) {
+      this._selectThread(action.payload.threadID);
+    },
+  },
+});
+```
 
 ```js
 /**
@@ -214,6 +234,44 @@ MiniFlux.ActionCreator.dispatch(actionType, payload)
 This just a singleton of Facebook's Flux dispatcher. Refer to [HERE][dispatcher]
 for the documentation. You **shouldn't** have to interact with this singleton
 directly.
+
+# Contributing to MinFlux
+
+Fork `git@github.com:jnhuynh/min-flux.git`, clone your new fork.
+
+```
+$ cd min-flux
+$ npm install
+$ npm install -g gulp
+$ npm install -g mocha
+```
+
+We use [Mocha][1] as our testing framework and [Chai][2] as our test assertion
+library.
+
+### Testing MinFlux
+
+For one test run:
+
+```
+$ gulp test
+
+or
+
+$ gulp
+```
+
+For live reloading:
+
+```
+$ gulp live-test
+```
+
+### Building MinFlux
+
+```
+$ gulp build
+```
 
 [mocha]:http://mochajs.org/
 [chai]:http://chaijs.com/
