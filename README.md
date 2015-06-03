@@ -124,6 +124,8 @@ var ThreadStore = new MinFlux.Store({
 });
 ```
 
+##### MiniFlux.Store(spec)
+
 ```js
 /**
  * Constructor function for new MinFlux.Store.
@@ -136,8 +138,9 @@ var ThreadStore = new MinFlux.Store({
  * @param spec {Object} custom properties for new ActionCreator instance
  * @return {MinFlux.ActionCreator}
  */
-MiniFlux.Store(spec)
 ```
+
+##### MiniFlux.Store._data
 
 ```js
 /**
@@ -147,8 +150,9 @@ MiniFlux.Store(spec)
  * @private
  * @property _data
  */
-MiniFlux.Store._data
 ```
+
+##### MiniFlux.Store.emitChange()
 
 ```js
 /**
@@ -157,8 +161,9 @@ MiniFlux.Store._data
  * @method emitChange
  * @return {MinFlux.Store}
  */
-MinFlux.Store.emitChange()
 ```
+
+##### MinFlux.Store.addChangeListener(callback)
 
 ```js
 /**
@@ -168,8 +173,9 @@ MinFlux.Store.emitChange()
  * @param callback {Function} the callback that will be registered
  * @return {MinFlux.Store}
  */
-MinFlux.Store.addChangeListener(callback)
 ```
+
+##### MinFlux.Store.removeChangeListener(callback)
 
 ```js
 /**
@@ -179,10 +185,11 @@ MinFlux.Store.addChangeListener(callback)
  * @param callback {Function} the callback that was registered prior
  * @return {MinFlux.Store}
  */
-MinFlux.Store.removeChangeListener(callback)
 ```
 
 ### MiniFlux.ActionCreator
+
+##### MinFlux.ActionCreator(spec)
 
 ```js
 /**
@@ -203,8 +210,9 @@ MinFlux.Store.removeChangeListener(callback)
  * @param spec {Object} custom properties for new ActionCreator instance
  * @return {MinFlux.ActionCreator}
  */
-MinFlux.ActionCreator(spec)
 ```
+
+##### ActionCreator.actionTypes
 
 ```js
 /**
@@ -214,8 +222,9 @@ MinFlux.ActionCreator(spec)
  * @type {Object}
  * @default {}
  */
-ActionCreator.actionTypes
 ```
+
+##### MiniFlux.ActionCreator.dispatch(actionType, payload)
 
 ```js
 /**
@@ -226,7 +235,6 @@ ActionCreator.actionTypes
  * @param payload {Object} data to send along with action
  * @return {MinFlux.ActionCreator}
  */
-MiniFlux.ActionCreator.dispatch(actionType, payload)
 ```
 
 ### MiniFlux.Dispatcher
