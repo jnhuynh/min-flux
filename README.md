@@ -215,9 +215,9 @@ module.exports = React.createClass({
 
 # API
 
-### MiniFlux.Store
+### MinFlux.Store
 
-##### MiniFlux.Store(spec)
+##### MinFlux.Store(spec)
 
 ```js
 /**
@@ -233,7 +233,7 @@ module.exports = React.createClass({
  */
 ```
 
-##### MiniFlux.Store._data
+##### MinFlux.Store._data
 
 ```js
 /**
@@ -245,7 +245,7 @@ module.exports = React.createClass({
  */
 ```
 
-##### MiniFlux.Store.emitChange()
+##### MinFlux.Store.emitChange()
 
 ```js
 /**
@@ -280,7 +280,7 @@ module.exports = React.createClass({
  */
 ```
 
-### MiniFlux.ActionCreator
+### MinFlux.ActionCreator
 
 ##### MinFlux.ActionCreator(spec)
 
@@ -317,7 +317,7 @@ module.exports = React.createClass({
  */
 ```
 
-##### MiniFlux.ActionCreator.dispatch(actionType, payload)
+##### MinFlux.ActionCreator.dispatch(actionType, payload)
 
 ```js
 /**
@@ -330,7 +330,7 @@ module.exports = React.createClass({
  */
 ```
 
-### MiniFlux.Dispatcher
+### MinFlux.Dispatcher
 
 This just a singleton of Facebook's Flux dispatcher. Refer to [HERE][dispatcher]
 for the documentation. You **shouldn't** have to interact with this singleton
