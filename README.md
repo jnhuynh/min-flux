@@ -3,8 +3,9 @@
 MinFlux is a minimal, convention based framework for creating [React][react] and
 [React-Native][react-native] applications with the [Flux][flux] architecture.
 
-This framework is written with ES2015 syntax via [Babel][babel]. It uses [Gulp][gulp]
-for testing and building.
+This framework is written with ES2015 syntax via [Babel][babel]. It uses
+[Gulp][gulp] running tasks like testing and building. We use [Mocha][1] as our
+testing framework and [Chai][2] as our test assertion library.
 
 ### Vocabulary
 
@@ -345,9 +346,6 @@ $ npm install
 $ npm install -g gulp
 $ npm install -g mocha
 ```
-
-We use [Mocha][1] as our testing framework and [Chai][2] as our test assertion
-library.
 
 ### Testing MinFlux
 
