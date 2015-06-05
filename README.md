@@ -4,8 +4,22 @@ MinFlux is a minimal, convention based framework for creating [React][react] and
 [React-Native][react-native] applications with the [Flux][flux] architecture.
 
 This framework is written with ES2015 syntax via [Babel][babel]. It uses
-[Gulp][gulp] running tasks like testing and building. We use [Mocha][1] as our
-testing framework and [Chai][2] as our test assertion library.
+[Gulp][gulp] running tasks like testing and building. We use [Mocha][mocha] as our
+testing framework and [Chai][chai] as our test assertion library.
+
+**Why not just use [Fluxxor][fluxxor]?**
+
+Fluxxor is a good tool and it is more mature. If it works for you, awesome.
+However, during our personal attempt at using it, we found it's API cumbersome.
+We also found that it didn't play nicely with [React-Native][react-native] out
+of the box. Lastly, it's a tool. As a tool it does not encourage or enforce
+conventions or project structure. That is not what we were looking for. We
+wanted to something more consistent and structured, yet light weight.
+
+We created MinFlux to work with [React] and [React-Native] as soon as you import
+it. Furthermore, MinFlux's goal is to be a light weight framework. As such, we'll
+define conventions and structure as it grows. If this appeals to you, contribute
+and help us shape MinFlux.
 
 ### Vocabulary
 
@@ -379,3 +393,4 @@ $ gulp build
 [dispatcher]:https://facebook.github.io/flux/docs/dispatcher.html#content
 [babel]:https://babeljs.io/
 [gulp]:http://gulpjs.com/
+[fluxxor]:http://fluxxor.com/
