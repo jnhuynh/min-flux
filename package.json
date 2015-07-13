@@ -12,7 +12,10 @@
     "react-native"
   ],
   "author": "John Huynh <john@huynh.io>",
-  "repository": "jnhuynh/min-flux",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jnhuynh/min-flux"
+  },
   "license": "MIT",
   "dependencies": {
     "events": "^1.0.2",
